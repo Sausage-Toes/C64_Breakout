@@ -1,111 +1,80 @@
 ; 10 SYS (49152)
+
 *=$801
-          byte $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
 
-*= 49152
-;these are memory addresses for the variables starting ar 679
-scr_loc =  679 
-brick_color =  680
+        BYTE    $0E, $08, $0A, $00, $9E, $20, $28,  $34, $39, $31, $35, $32, $29, $00, $00, $00
 
+
+* = 49152
+
+SCR_ADDR_LO    = 251
+SCR_ADDR_HI    = 252
 
         ;clear screen
         jsr $E544
+        jsr draw_brick_chars
 
-        ;lda #26 ; "Z"
-        ;sta 1184
-        ;sta 1264
-        ;sta 1304
-        ;sta 1344
+        ;lda #$A0                ;$A0 = #160
+        ;sta SCR_ADDR_LO         ;low byte
+        ;lda #$04                ;$04 = #4
+        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $04A0 = 1184
+        ;jsr draw_row
 
-;set start location 
-;max x = 40 columns max y = 25 rows
-        lda #160
-        sta scr_loc
+        ;lda #$F0                ;$F0 = #240
+        ;sta SCR_ADDR_LO         ;low byte
+        ;lda #$04                ;$04 = #4
+        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $04F0 = 1264
+        ;jsr draw_row
 
-        lda #2
-        sta brick_color
-        jsr draw_brick_row
+        ;lda #$40                ;$40 = #64
+        ;sta SCR_ADDR_LO         ;low byte
+        ;lda #$05                ;$05 = #5
+        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $0540 = 1344
+        ;jsr draw_row
 
-        ;lda #80
-        ;sta scr_loc
-        ;lda #8
-        ;sta brick_color
-        ;jsr draw_brick_row
+        ;lda #$90                ;$90 = #144
+        ;sta SCR_ADDR_LO         ;low byte
+        ;lda #$05                ;$05 = #5
+        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $0590 = 1424
+        ;jsr draw_row
+
 
         rts
 
-draw_brick_row
+draw_brick_chars        
+        ldx #0 ;
+loop
+        lda row_screen_address,x
+        sta SCR_ADDR_LO
+        inx
+        lda row_screen_address,x
+        sta SCR_ADDR_HI
+        inx
+        jsr draw_row
+        cpx #8
+        bne loop
+        rts
 
-        ldy #0
-draw_brick_row_top    
-        jsr draw_brick_top
+
+draw_row        
+        ldy #0 ;
+read_brick_row_char_loop
+        lda brick_row_char_data,y
+        sta (SCR_ADDR_LO),y
         iny
-        cpy #10
-        bne draw_brick_row_top
-
-        ldy #0
-draw_brick_row_bottom    
-        jsr draw_brick_bottom
-        iny
-        cpy #10
-        bne draw_brick_row_bottom 
-        
+        cpy #80
+        bne read_brick_row_char_loop
         rts
 
-draw_brick_top
-        ldx scr_loc
-        lda #108
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
+row_screen_address
+        byte 160,4,240,4,64,5,144,5
+                
+
+brick_row_char_data
+        byte 108,98,98,123,108,98,98,123,108,98,98,123,108,98,98,123
+        byte 108,98,98,123,108,98,98,123,108,98,98,123,108,98,98,123
+        byte 108,98,98,123,108,98,98,123
         
-        inx 
-        lda #98
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
-
-        inx
-        lda #98
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
-        
-        inx
-        lda #123
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
-
-        inx
-        stx scr_loc
-        rts
-
-draw_brick_bottom
-        ldx scr_loc
-        lda #124
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
-        
-        inx 
-        lda #226
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
-
-        inx
-        lda #226
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
-        
-        inx
-        lda #126
-        sta 1024,x
-        lda brick_color
-        sta 55296,x
-
-        inx
-        stx scr_loc
-        rts
+        byte 124,226,226,126,124,226,226,126,124,226,226,126,124,226,226,126
+        byte 124,226,226,126,124,226,226,126,124,226,226,126,124,226,226,126
+        byte 124,226,226,126,124,226,226,126
