@@ -1,3 +1,4 @@
+1 rem by steve marrow
 5 rem sprite at char position
 10 printchr$(147)
 20 poke53269,1:poke53287,7 :rem cursor sprite

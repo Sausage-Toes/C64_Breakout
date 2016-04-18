@@ -2,43 +2,47 @@
 
 *=$801
 
-        BYTE    $0E, $08, $0A, $00, $9E, $20, $28,  $34, $39, $31, $35, $32, $29, $00, $00, $00
-
+        BYTE $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
 
 * = 49152
 
-SCR_ADDR_LO    = 251
-SCR_ADDR_HI    = 252
+SCR_ADDR_LO = 251
+SCR_ADDR_HI = 252
 
+        ;init_screen      
+        lda #0          ;0 = black
+        sta $d021       ;set background color
+        lda #15         ;15 = light gray
+        sta $d020       ;set border color 
         ;clear screen
         jsr $E544
+
         jsr draw_brick_chars
+        jsr color_bricks
+        rts
 
-        ;lda #$A0                ;$A0 = #160
-        ;sta SCR_ADDR_LO         ;low byte
-        ;lda #$04                ;$04 = #4
-        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $04A0 = 1184
-        ;jsr draw_row
+color_bricks
+        ldx #0
+read_color_addr_loop
+        lda row_color_adrress,x
+        sta SCR_ADDR_LO
+        inx
+        lda row_color_adrress,x
+        sta SCR_ADDR_HI
+        inx 
+        lda brick_color_values,x-2
+        jsr color_row
+        cpx #8 ; 4 rows - incr by 2 each interation for hi/lo
+        bne read_color_addr_loop
+        rts
 
-        ;lda #$F0                ;$F0 = #240
-        ;sta SCR_ADDR_LO         ;low byte
-        ;lda #$04                ;$04 = #4
-        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $04F0 = 1264
-        ;jsr draw_row
-
-        ;lda #$40                ;$40 = #64
-        ;sta SCR_ADDR_LO         ;low byte
-        ;lda #$05                ;$05 = #5
-        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $0540 = 1344
-        ;jsr draw_row
-
-        ;lda #$90                ;$90 = #144
-        ;sta SCR_ADDR_LO         ;low byte
-        ;lda #$05                ;$05 = #5
-        ;sta SCR_ADDR_HI         ;hi byte (16 bit) $0590 = 1424
-        ;jsr draw_row
-
-
+color_row
+        ldy #0    
+color_row_loop
+        sta (SCR_ADDR_LO),y
+        iny
+        cpy #80
+        bne color_row_loop
         rts
 
 draw_brick_chars        
@@ -54,7 +58,6 @@ read_scr_addr_loop
         cpx #8 ; 4 rows - incr by 2 each interation for hi/lo
         bne read_scr_addr_loop
         rts
-
 
 draw_row        
         ldy #0 ;
@@ -73,14 +76,8 @@ row_screen_address
         ; row 3 $0540 = 1344 / $40 = #64  , $05 = #5
         ; row 4 $0590 = 1424 / $90 = #144 , $05 = #5
         byte 160,4,240,4,64,5,144,5
-
 row_color_adrress
-        ; row 1 $A0D8 = 41176 / $A0 = #160 , $D8 = #216
-        ; row 2 $A128 = 41256 / $A1 = #161 , $28 = #40
-        ; row 3 $A178 = 41336 / $A1 = #161 , $78 = #120
-        ; row 4 $A1C8 = 41416 / $A1 = #161 , $C8 = #200
-        byte 160,216,161,40,161,120,161,200           
-
+        byte 160,216,240,216,64,217,144,217
 brick_row_char_data
         ;bricks are 2 char high, 4 char wide, there are 10 bricks per row
         ;row brick of tops
@@ -91,3 +88,6 @@ brick_row_char_data
         byte 124,226,226,126,124,226,226,126,124,226,226,126,124,226,226,126
         byte 124,226,226,126,124,226,226,126,124,226,226,126,124,226,226,126
         byte 124,226,226,126,124,226,226,126
+brick_color_values
+        ;red = 2, orange = 8, green = 5, yellow = 7
+        byte 2,2,8,8,5,5,7,7
