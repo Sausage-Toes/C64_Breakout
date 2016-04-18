@@ -1,0 +1,11 @@
+
+******* 5 Label(s) *******
+draw_brick_bottom = $C05D
+draw_brick_row = $C011
+draw_brick_row_bottom = $C01D
+draw_brick_row_top = $C013
+draw_brick_top = $C026
+
+******* 2 Variable(s) *******
+brick_color = 680
+scr_loc = 679

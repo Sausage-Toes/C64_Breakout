@@ -1,5 +1,3 @@
-##{0:0:0:playfield.prg}D:\dev\C64\C64_Breakout\playfield.asm
-
 ; 10 SYS (49152)
 *=$801
           byte $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
@@ -111,4 +109,3 @@ draw_brick_bottom
         inx
         stx scr_loc
         rts
-
