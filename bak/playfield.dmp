@@ -1,11 +1,13 @@
 
-******* 5 Label(s) *******
-draw_brick_bottom = $C05D
-draw_brick_row = $C011
-draw_brick_row_bottom = $C01D
-draw_brick_row_top = $C013
-draw_brick_top = $C026
+******* 7 Label(s) *******
+brick_row_char_data = $C03A
+draw_brick_chars = $C007
+draw_row = $C01D
+read_brick_row_char_loop = $C01F
+read_scr_addr_loop = $C009
+row_color_adrress = $C032
+row_screen_address = $C02A
 
 ******* 2 Variable(s) *******
-brick_color = 680
-scr_loc = 679
+SCR_ADDR_HI = 252
+SCR_ADDR_LO = 251
