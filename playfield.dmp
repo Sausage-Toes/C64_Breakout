@@ -2,14 +2,14 @@
 ******* 12 Label(s) *******
 brick_color_values = $C0BA
 brick_row_char_data = $C06A
-color_bricks = $C014
-color_row = $C02D
-color_row_loop = $C02F
-draw_brick_chars = $C037
-draw_row = $C04D
-read_brick_row_char_loop = $C04F
-read_color_addr_loop = $C016
-read_scr_addr_loop = $C039
+color_bricks = $C037
+color_row = $C050
+color_row_loop = $C052
+draw_brick_chars = $C014
+draw_row = $C02A
+read_brick_row_char_loop = $C02C
+read_color_addr_loop = $C039
+read_scr_addr_loop = $C016
 row_color_adrress = $C062
 row_screen_address = $C05A
 
