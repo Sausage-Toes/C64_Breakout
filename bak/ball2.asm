@@ -1,5 +1,3 @@
-##{0:0:0:ball2.prg}D:\dev\C64\C64_Breakout\ball2.asm
-
 ;C64 screen and sprite memory addresses
 enable_sprite       = $D015
 sprite0_mem_pointer = $07f8
@@ -140,4 +138,3 @@ check_msb
         bcc clear_msb
         rts
         
-

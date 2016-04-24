@@ -8,9 +8,14 @@
         byte $ab,$e4,$6a,$aa,$f9,$6a,$aa,$b9,$6a,$aa,$b9,$6a,$aa,$a9,$6a,$aa
         byte $a9,$6a,$aa,$a9,$6a,$aa,$a9,$6a,$aa,$a9,$6a,$aa,$a9,$1a,$aa,$a4
         byte $1a,$aa,$a4,$06,$aa,$90,$06,$aa,$90,$01,$aa,$40,$00,$55,$00,$87
+
+        ;byte $38,$00,$00,$7c,$00,$00,$fe,$00,$00,$fe,$00,$00,$fe,$00,$00,$7c
+        ;byte $00,$00,$38,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+        ;byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+        ;byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01
  
 * = 49152
-ballx =  679 ;these are memory addresses for the variables starting ar 679
+ballx =  679 ;these are memory addresses for the variables starting at 679
 bally =  680
 dirx =   681
 diry =   682

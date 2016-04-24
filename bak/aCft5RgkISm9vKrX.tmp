@@ -1,103 +1,170 @@
-##{0:0:0:playfield.prg}D:\dev\C64\C64_Breakout\playfield.asm
+##{0:0:0:bouncing_ball.prg}D:\dev\C64\C64_Breakout\bouncing_ball.asm
 
 ; 10 SYS (49152)
-
 *=$801
+        byte $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
 
-        BYTE $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
+* = 16320
+;incbin "ballsprite.bin"
+        ;byte $00,$55,$00,$01,$aa,$40,$06,$aa,$90,$06,$af,$90,$1a,$ab,$a4,$1a
+        ;byte $ab,$e4,$6a,$aa,$f9,$6a,$aa,$b9,$6a,$aa,$b9,$6a,$aa,$a9,$6a,$aa
+        ;byte $a9,$6a,$aa,$a9,$6a,$aa,$a9,$6a,$aa,$a9,$6a,$aa,$a9,$1a,$aa,$a4
+        ;byte $1a,$aa,$a4,$06,$aa,$90,$06,$aa,$90,$01,$aa,$40,$00,$55,$00,$87
 
+        byte $38,$00,$00,$7c,$00,$00,$fe,$00,$00,$fe,$00,$00,$fe,$00,$00,$7c
+        byte $00,$00,$38,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+        byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+        byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01
+ 
 * = 49152
+ballx =  679 ;these are memory addresses for the variables starting at 679
+bally =  680
+dirx =   681
+diry =   682
+ 
+leftx =   #12 ;constant left border
+topy =    #50 ;const top
+bottomy = #230 ;const bottom
+rightx =  #161 ;const right NOTE: this is 1/2 the x-axis actual resolution
+ 
+        lda #1
+        sta dirx ;set x direction
+        lda #1
+        sta diry ;set y direction
+ 
+        lda #20 ;left
+        sta ballx
+        lda #48 ;top
+        sta bally
+ 
+        lda #5
+        sta $d027       ;sprite color
 
-SCR_ADDR_LO = 251
-SCR_ADDR_HI = 252
+        ;lda #1
+        ;sta $d01c       ;enable multi-color sprite
 
+        lda #0          ;5 = green
+        sta $d025       ;multi-color sprite color 1
+
+        lda #1         ;13 = light green
+        sta $d026       ;multi-color sprite color 2
+
+        lda #1
+        sta $d015       ;enable sprite
+
+        ;set ball start location
+        lda #32
+        sta $d000
+        lda #100
+        sta $d001
         ;init_screen      
-        lda #0          ;0 = black
+        lda #6          ;0 = black
         sta $d021       ;set background color
-        lda #15         ;15 = light gray
-        sta $d020       ;set border color 
+        lda #14         ;15 = light gray
+        sta $d020       ;set border color  
         ;clear screen
         jsr $E544
+ 
+raster
+        ;inc $D020 ;flickering border color
+        
+;check for raster scan line 250
+        lda 53266
+        cmp #250
+        bne raster
+ 
+main
+        jsr check_msb
+        jsr moveball_horizontally
+        lda ballx
+        asl a   ;keep x-axis values < 255 (8bit max value)
+        sta $d000
 
-        jsr draw_brick_chars
-        jsr color_bricks
+        jsr moveball_vertically
+        lda bally
+        sta $d001
+
+        ;check floor collision
+        lda bally
+        cmp bottomy
+        ;check cieling collision
+        bcs reverseup_diry
+        cmp topy
+        bcc reversedown_diry  
+        ;check wall collisions
+        lda ballx
+        cmp rightx 
+        bcs reverseleft_dirx
+        cmp leftx
+        bcc reverseright_dirx
+
+        jmp raster
+        
+moveball_horizontally
+        lda dirx
+        cmp #0
+        beq moveball_left
+        cmp #1
+        beq moveball_right
         rts
 
-draw_brick_chars        
-        ldx #0 ;loop index
-read_scr_addr_loop
-        lda row_screen_address,x
-        sta SCR_ADDR_LO
-        inx
-        lda row_screen_address,x
-        sta SCR_ADDR_HI
-        inx
-        jsr draw_row
-        cpx #8 ; 4 rows - incr by 2 each interation for hi/lo
-        bne read_scr_addr_loop
+moveball_vertically
+        ;lda #2
+        ;sta 53280
+        lda diry
+        cmp #0
+        beq moveball_up
+        cmp #1
+        beq moveball_down
         rts
-
-draw_row        
-        ldy #0 ;loop index
-read_brick_row_char_loop
-        lda brick_row_char_data,y
-        sta (SCR_ADDR_LO),y
-        iny
-        cpy #80 ;40 char per row, 2 rows for top and bottom chars
-        bne read_brick_row_char_loop
+ 
+moveball_right
+        inc ballx
         rts
-
-color_bricks
-        ldx #0 ;loop index
-read_color_addr_loop
-        lda row_color_adrress,x
-        sta SCR_ADDR_LO
-        inx
-        lda row_color_adrress,x
-        sta SCR_ADDR_HI
-        inx 
-        lda brick_color_values,x-2
-        jsr color_row
-        cpx #8 ; 4 rows - incr by 2 each interation for hi/lo
-        bne read_color_addr_loop
+moveball_left
+        dec ballx
         rts
-
-color_row
-        ldy #0 ;loop index   
-color_row_loop
-        sta (SCR_ADDR_LO),y
-        iny
-        cpy #80
-        bne color_row_loop
+moveball_up
+        dec bally
         rts
+moveball_down
+        inc bally
+        rts
+ 
+reverseup_diry
+        lda #0
+        sta diry
+        ;lda #11
+        ;sta 53280
+        inc $d027
+        jmp main
+reversedown_diry
+        lda #1
+        sta diry
+        jmp main
+reverseright_dirx
+        lda #1
+        sta dirx
+        jmp main
+reverseleft_dirx
+        lda #0
+        sta dirx
+        jmp main
 
-row_screen_address
-        ;screen memory addresses for start of each of the 4 rows of bricks
-        ;1024+X+(40*Y)
-        ; starting 4 rows from the top 1184
-        ; row 1 $04A0 = 1184 / $A0 = #160 , $04 = #4
-        ; row 2 $04F0 = 1264 / $F0 = #240 , $04 = #4
-        ; row 3 $0540 = 1344 / $40 = #64  , $05 = #5
-        ; row 4 $0590 = 1424 / $90 = #144 , $05 = #5
-        byte 160,4,240,4,64,5,144,5 ;note reverse order of 2 byte mem addr
-row_color_adrress
-        ;55296+X+(40*Y)
-        ;55456=$D8A0 / $A0=#160,$D8=#216 
-        ;55536=$D8F0 / $F0=#240,$D8=#216 
-        ;55616=$D940 / $40=#64,$D9=#217
-        ;55696=$D990 / $90=#144,$D9=#217
-        byte 160,216,240,216,64,217,144,217 ;note reverse order of 2 byte mem addr
-brick_row_char_data
-        ;bricks are 2 char high, 4 char wide, there are 10 bricks per row
-        ;row brick of tops
-        byte 108,98,98,123,108,98,98,123,108,98,98,123,108,98,98,123
-        byte 108,98,98,123,108,98,98,123,108,98,98,123,108,98,98,123
-        byte 108,98,98,123,108,98,98,123
-        ;row of brick bottoms
-        byte 124,226,226,126,124,226,226,126,124,226,226,126,124,226,226,126
-        byte 124,226,226,126,124,226,226,126,124,226,226,126,124,226,226,126
-        byte 124,226,226,126,124,226,226,126
-brick_color_values
-        ;red = 2, orange = 8, green = 5, yellow = 7
-        byte 2,0,8,0,5,0,7,0 ;zero is pad
+set_msb
+        lda #1
+        sta $d010
+        rts 
+clear_msb
+        lda #0
+        sta $d010
+        rts
+check_msb
+        lda ballx
+        cmp #127
+        bcs set_msb
+        cmp #128
+        bcc clear_msb
+
+        ;rts
 
