@@ -9,7 +9,7 @@ background_color    = $d021
 boarder_color       = $d020
 clear_screen        = $E544
 raster_line         = $D012
-status_register     = $030F
+;status_register     = $030F
 
 ; 10 SYS (49152)
 *=$801
@@ -25,7 +25,7 @@ status_register     = $030F
  
 * = 49152 ;$C000-$CFFF, 49152-53247 Upper RAM area (4096 bytes).
         lda  #255
-        sta  $07f8
+        sta  sprite0_mem_pointer ;Set sprite memory pointer
 
 ball_x    =  679 ;these are memory addresses for the variables starting at 679
 ball_y    =  681
@@ -44,11 +44,6 @@ right  = #81 ;const right NOTE: this is 1/2 the x-axis actual resolution
         lda #1
         sta dir_y ;set y direction
  
-        ;lda #20 ;left
-        ;sta ball_x
-        ;lda #48 ;top
-        ;sta ball_y
- 
         lda #1
         sta sprite0_color       ;sprite color 1=white
 
@@ -58,7 +53,8 @@ right  = #81 ;const right NOTE: this is 1/2 the x-axis actual resolution
         ;set ball start location
         lda left
         sta sprite0_x ; X
-        ; bit 0 in $d010 is set, sprite 0's x coordinate is 256, plus the value in $d000
+        ; bit 0 in $d010 is set, sprite 0's x coordinate is 256
+        ;, plus the value in $d000
         lda #0
         sta msb_x
 
@@ -81,7 +77,6 @@ raster
         bne raster
 
 main
-        
         jsr move_ball_horizontally
         
         ;check wall collisions
@@ -89,15 +84,12 @@ main
         cmp #1
         bne look_left
         lda sprite0_x
-
         cmp right 
-        ;bcs ball_dir_set_left
         beq ball_dir_set_left
 look_left
         lda sprite0_x
         cmp left
         bcc ball_dir_set_right
-
         jmp raster
 
 ball_dir_set_right
@@ -117,35 +109,18 @@ move_ball_horizontally
         beq moveball_right
         rts
 moveball_right
-        ;lda #1
-        ;adc sprite0_x
-        ;sta sprite0_x
-        ;sta 251
-        ;brk
-        ;bcs set_msb
-
         inc sprite0_x
         beq set_msb
-
-        ;jsr check_msb
-        ;lda status_register
-        ;lda msb_x
-        ;and #1
-        ;beq set_msb
         rts
-
-
-
-
 moveball_left
         dec sprite0_x
         jsr check_msb
         rts
+
 set_msb
-        ;brk
         lda #1
         sta msb_x
-        lad #0
+        lda #0
         sta sprite0_x
         rts 
 clear_msb

@@ -9,7 +9,7 @@ background_color    = $d021
 boarder_color       = $d020
 clear_screen        = $E544
 raster_line         = $D012
-status_register     = $030F
+;status_register     = $030F
 
 ; 10 SYS (49152)
 *=$801
@@ -25,7 +25,7 @@ status_register     = $030F
  
 * = 49152 ;$C000-$CFFF, 49152-53247 Upper RAM area (4096 bytes).
         lda  #255
-        sta  $07f8
+        sta  sprite0_mem_pointer ;Set sprite memory pointer
 
 ball_x    =  679 ;these are memory addresses for the variables starting at 679
 ball_y    =  681
@@ -44,11 +44,6 @@ right  = #81 ;const right NOTE: this is 1/2 the x-axis actual resolution
         lda #1
         sta dir_y ;set y direction
  
-        ;lda #20 ;left
-        ;sta ball_x
-        ;lda #48 ;top
-        ;sta ball_y
- 
         lda #1
         sta sprite0_color       ;sprite color 1=white
 
@@ -58,7 +53,8 @@ right  = #81 ;const right NOTE: this is 1/2 the x-axis actual resolution
         ;set ball start location
         lda left
         sta sprite0_x ; X
-        ; bit 0 in $d010 is set, sprite 0's x coordinate is 256, plus the value in $d000
+        ; bit 0 in $d010 is set, sprite 0's x coordinate is 256
+        ;, plus the value in $d000
         lda #0
         sta msb_x
 
@@ -124,6 +120,8 @@ moveball_left
 set_msb
         lda #1
         sta msb_x
+        lda #0
+        sta sprite0_x
         rts 
 clear_msb
         lda #0

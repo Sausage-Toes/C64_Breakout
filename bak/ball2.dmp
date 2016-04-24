@@ -2,8 +2,8 @@
 ******* 11 Label(s) *******
 ball_dir_set_left = $C05F
 ball_dir_set_right = $C057
-check_msb = $C08F
-clear_msb = $C089
+check_msb = $C091
+clear_msb = $C08B
 look_left = $C04D
 main = $C03C
 move_ball_horizontally = $C067
@@ -12,7 +12,7 @@ moveball_right = $C073
 raster = $C035
 set_msb = $C080
 
-******* 20 Variable(s) *******
+******* 19 Variable(s) *******
 background_color = $d021
 ball_x = 679
 ball_y = 681
@@ -31,5 +31,4 @@ sprite0_color = $D027
 sprite0_mem_pointer = $07f8
 sprite0_x = $D000
 sprite0_y = $D001
-status_register = $030F
 top = #50
