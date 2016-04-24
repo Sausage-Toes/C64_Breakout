@@ -9,6 +9,7 @@ background_color    = $d021
 boarder_color       = $d020
 clear_screen        = $E544
 raster_line         = $D012
+status_register     = $030F
 
 ; 10 SYS (49152)
 *=$801
@@ -30,6 +31,7 @@ ball_x    =  679 ;these are memory addresses for the variables starting at 679
 ball_y    =  681
 dir_x     =  682
 dir_y     =  683
+mask_temp =  684
 
 left   = #24 ;const left border
 top    = #50 ;const top
@@ -79,7 +81,6 @@ raster
         bne raster
 
 main
-        
         jsr move_ball_horizontally
         
         ;check wall collisions
@@ -87,15 +88,12 @@ main
         cmp #1
         bne look_left
         lda sprite0_x
-
         cmp right 
-        ;bcs ball_dir_set_left
-        bne ball_dir_set_left
+        beq ball_dir_set_left
 look_left
         lda sprite0_x
         cmp left
         bcc ball_dir_set_right
-
         jmp raster
 
 ball_dir_set_right
@@ -116,12 +114,13 @@ move_ball_horizontally
         rts
 moveball_right
         inc sprite0_x
-        jsr check_msb
+        beq set_msb
         rts
 moveball_left
         dec sprite0_x
         jsr check_msb
         rts
+
 set_msb
         lda #1
         sta msb_x
@@ -132,7 +131,7 @@ clear_msb
         rts
 check_msb
         lda sprite0_x
-        cmp #254
+        cmp #255
         bcs set_msb
         cmp #255
         bcc clear_msb
