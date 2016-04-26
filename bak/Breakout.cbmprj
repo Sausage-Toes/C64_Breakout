@@ -31,13 +31,13 @@
         <FileName>sprite_at_char_pos.bas</FileName>
         <FileName>bouncing_ball.asm</FileName>
         <FileName>playfield.asm</FileName>
-        <FileName>ball2.asm</FileName>
+        <FileName>ball_and_paddle.asm</FileName>
     </BuildList>
     <DetermineBuildOrder>0</DetermineBuildOrder>
     <PaddingByte>0</PaddingByte>
     <SourceFiles>
         <SourceFile>
-            <Name>ball2.asm</Name>
+            <Name>ball_and_paddle.asm</Name>
             <PrgName />
             <FileType>2</FileType>
             <IncludeInBuild>True</IncludeInBuild>

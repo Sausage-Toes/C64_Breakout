@@ -1,5 +1,3 @@
-##{0:0:0:ball_and_paddle.prg}D:\dev\C64\C64_Breakout\ball_and_paddle.asm
-
 ;C64 screen and sprite memory addresses
 enable_sprite       = $D015
 sprite0_mem_pointer = $07F8
@@ -293,18 +291,12 @@ move_paddle_right
                 ;NOTE: currently RIGHT is already offset with ball width
                 ;assumes paddle is x-axis expanded
         beq dont_toggle_paddle_msb_right
-        
-        ldx #0
 mv_pad_r
-        inx
         inc sprite1_x
         bne dont_toggle_paddle_msb_right
         lda msb_x
         eor #$02 ;sprite1 x-axis msb
         sta msb_x
-        cpx #2
-        bne mv_pad_r
-        brk
 dont_toggle_paddle_msb_right
         rts
 
@@ -397,4 +389,3 @@ clr
 
 ;score_label byte 32,19,3,15,18,5,58
 ball_counter_label byte 2,1,12,12,58
-
