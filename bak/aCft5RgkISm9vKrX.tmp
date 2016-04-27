@@ -293,18 +293,12 @@ move_paddle_right
                 ;NOTE: currently RIGHT is already offset with ball width
                 ;assumes paddle is x-axis expanded
         beq dont_toggle_paddle_msb_right
-        
-        ldx #0
 mv_pad_r
-        inx
         inc sprite1_x
         bne dont_toggle_paddle_msb_right
         lda msb_x
         eor #$02 ;sprite1 x-axis msb
         sta msb_x
-        cpx #2
-        bne mv_pad_r
-        brk
 dont_toggle_paddle_msb_right
         rts
 

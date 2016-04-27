@@ -1,0 +1,4 @@
+*.dmp
+*.tmp
+auto.prg
+bak/
