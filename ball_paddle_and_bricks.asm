@@ -44,10 +44,19 @@ brick_char_y   = 682
 dir_x          = 683
 dir_y          = 684
 ball_counter   = 685
+score_digit1   = 686
+score_digit2   = 687
+score_digit3   = 688
+score_digit4   = 689
 
-ball_cnt_label_scr_addr  = 1026  ; 1024+X+(40*Y)  ;1985
-ball_cnt_label_color_mem = 55298 ;55296+X+(40*Y)  ;56257
-ball_counter_scr_addr = 1032 ;label start addr + label length + 1 ;1991
+ball_cnt_label_scr_addr  =  1985 ; 1024+X+(40*Y)  ; 1026
+ball_cnt_label_color_mem = 56257  ;55296+X+(40*Y)  ; 55298
+ball_counter_scr_addr    =  1991;label start addr + label length + 1 ; 1032
+score_label_scr_addr = 2011
+score_digit1_scr_addr = 2019
+score_digit2_scr_addr = 2020
+score_digit3_scr_addr = 2021
+score_digit4_scr_addr = 2022
 
 ;constants 
 left                = #24  ;left border
@@ -58,7 +67,7 @@ ball_start_x        = #180
 ball_start_y        = #144
 ball_color          = #1 ;white ball
 paddle_start_x      = #168
-paddle_start_y      = #232
+paddle_start_y      = #224
 paddle_color        = #6 ;blue paddle
 backgrnd_color      = #0 ;default darkblue is 6 , black=0
 boarder_color       = #15 ;default light blue is 14, light gray=15 
@@ -140,9 +149,23 @@ boarder_color       = #15 ;default light blue is 14, light gray=15
         sta ball_counter
         jsr display_ball_counter_label ;"BALL:"
         jsr display_ball_counter
+        lda #48
+        sta score_digit1
+        sta score_digit2
+        sta score_digit3
+        sta score_digit4
+        jsr display_score_label
+        jsr display_score
 
         ;test erase brick
         lda #25
+        sta brick_index
+        jsr erase_brick
+
+        lda #30
+        sta brick_index
+        jsr erase_brick
+        lda #34
         sta brick_index
         jsr erase_brick
         ;rts
@@ -362,18 +385,40 @@ display_ball_counter_label ;"BALL:"
 read_ball_cnt_label       
         lda ball_counter_label,x
         sta ball_cnt_label_scr_addr,x 
-        lda #7 ;yellow = 7
-        sta ball_cnt_label_color_mem,x 
+        ;lda #7 ;yellow = 7
+        ;sta ball_cnt_label_color_mem,x 
         inx
         cpx #5 ;label text length
         bne read_ball_cnt_label
-        sta ball_cnt_label_color_mem,x+1 ;color the counter 2 char right of label
-        sta ball_cnt_label_color_mem,x+2
+        ;sta ball_cnt_label_color_mem,x+1 ;color the counter 2 char right of label
+        ;sta ball_cnt_label_color_mem,x+2
         rts
  
 display_ball_counter
         lda ball_counter
         sta ball_counter_scr_addr
+        rts
+
+display_score_label ;"SCORE: "
+        ldx #0
+read_score_label
+        lda score_label,x
+        sta score_label_scr_addr,x
+        inx
+        cpx #7
+        bne read_score_label
+        rts
+
+display_score
+        lda score_digit1
+        sta score_digit1_scr_addr
+        lda score_digit2
+        sta score_digit2_scr_addr
+        lda score_digit3
+        sta score_digit3_scr_addr
+        lda score_digit4
+        sta score_digit4_scr_addr
+        lda #0
         rts
 
 draw_bricks
@@ -422,8 +467,6 @@ draw_brick
 read_brick_char_data_loop
         lda brick_char_data_top,y
         sta (SCR_ADDR_LO),y
-;        lda brick_char_data_bottom,y
-;        sta (SCR_ADDR_LO),y
         lda brick_char_data_bottom,y
         sta brick_char
         sty brick_char_y
@@ -450,7 +493,7 @@ read_color_addr_loop
         inx 
         lda brick_color_values,x-2
         jsr color_row
-        cpx #8 ; 4 rows - incr by 2 each interation for hi/lo
+        cpx #10 ; 4 rows - incr by 2 each interation for hi/lo
         bne read_color_addr_loop
         rts
 
@@ -485,10 +528,11 @@ row_color_adrress
         byte 200,216
         byte 24,217
         byte 104,217
+        byte 193,219
         
 brick_color_values
-        ;red = 2, orange = 8, green = 5, yellow = 7
-        byte 2,2,8,8,5,5,7,7
+        ;red = 2, orange = 8, green = 5, yellow = 7, cyan = 3, white =1, lt. gray = 15
+        byte 2,0,8,0,5,0,7,0,15,0
 brick_char_data_top
         byte 108,98,98,123 ;brick top
 brick_char_data_bottom
@@ -517,8 +561,6 @@ brick_screen_address_lo
         byte 24,28,32,36,40,44,48,52,56,60
         byte 104,108,112,116,120,124,128,132,136,140
         
-
-
 sound
         jsr clear_sound
         lda #5
@@ -543,7 +585,3 @@ clr
        dey
        bne clr
        rts
-
-
-
-

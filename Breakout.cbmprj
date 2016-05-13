@@ -33,6 +33,7 @@
         <FileName>playfield.asm</FileName>
         <FileName>ball_and_paddle.asm</FileName>
         <FileName>ball_paddle_and_bricks.asm</FileName>
+        <FileName>ball_paddle_and_bricks.asm</FileName>
     </BuildList>
     <DetermineBuildOrder>0</DetermineBuildOrder>
     <PaddingByte>0</PaddingByte>
