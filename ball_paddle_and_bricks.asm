@@ -50,9 +50,8 @@ score_digit3   = 688
 score_digit4   = 689
 
 ball_cnt_label_scr_addr  =  1985 ; 1024+X+(40*Y)  ; 1026
-ball_cnt_label_color_mem = 56257  ;55296+X+(40*Y)  ; 55298
 ball_counter_scr_addr    =  1991;label start addr + label length + 1 ; 1032
-score_label_scr_addr = 2011
+score_label_scr_addr  = 2011
 score_digit1_scr_addr = 2019
 score_digit2_scr_addr = 2020
 score_digit3_scr_addr = 2021
@@ -165,6 +164,7 @@ boarder_color       = #15 ;default light blue is 14, light gray=15
         lda #30
         sta brick_index
         jsr erase_brick
+
         lda #34
         sta brick_index
         jsr erase_brick
@@ -211,6 +211,7 @@ set_ball_direction_right
         sta dir_x
         jsr sound
         rts
+
 set_ball_direction_left
         lda #0
         sta dir_x
@@ -256,6 +257,7 @@ moveball_down
         inc sprite0_y
         jsr check_ball_floor_collision
         rts
+
 moveball_up
         dec sprite0_y
         jsr check__ball_ceiling_collision
@@ -385,13 +387,9 @@ display_ball_counter_label ;"BALL:"
 read_ball_cnt_label       
         lda ball_counter_label,x
         sta ball_cnt_label_scr_addr,x 
-        ;lda #7 ;yellow = 7
-        ;sta ball_cnt_label_color_mem,x 
         inx
         cpx #5 ;label text length
         bne read_ball_cnt_label
-        ;sta ball_cnt_label_color_mem,x+1 ;color the counter 2 char right of label
-        ;sta ball_cnt_label_color_mem,x+2
         rts
  
 display_ball_counter
@@ -425,7 +423,6 @@ draw_bricks
         lda #0
         sta brick_index
 draw_bricks_loop
-        
         jsr draw_brick
         inc brick_index
         lda brick_index
@@ -462,7 +459,6 @@ draw_brick
         sta SCR_ADDR_LO
         lda brick_screen_address_hi,x
         sta SCR_ADDR_HI
-        
         ldy #0
 read_brick_char_data_loop
         lda brick_char_data_top,y
