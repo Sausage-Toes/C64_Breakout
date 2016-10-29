@@ -26,4 +26,4 @@
 220 poke214,3:print:poke211,15:print"y:";yc
 230 poke214,4:print:poke211,12:printvl
 240 pokevl,peek(vl):poke54272+vl,2
-250 goto100
+250 goto60

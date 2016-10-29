@@ -48,14 +48,20 @@ score_digit1   = 686
 score_digit2   = 687
 score_digit3   = 688
 score_digit4   = 689
+score_digit5   = 690
+score_digit6   = 691
+
 
 ball_cnt_label_scr_addr  =  1985 ; 1024+X+(40*Y)  ; 1026
 ball_counter_scr_addr    =  1991;label start addr + label length + 1 ; 1032
 score_label_scr_addr  = 2011
-score_digit1_scr_addr = 2019
-score_digit2_scr_addr = 2020
-score_digit3_scr_addr = 2021
-score_digit4_scr_addr = 2022
+score_digit1_scr_addr = 2018
+score_digit2_scr_addr = 2019
+score_digit3_scr_addr = 2020
+score_digit4_scr_addr = 2021
+score_digit5_scr_addr = 2022
+score_digit6_scr_addr = 2023
+
 
 ;constants 
 left                = #24  ;left border
@@ -153,6 +159,8 @@ boarder_color       = #15 ;default light blue is 14, light gray=15
         sta score_digit2
         sta score_digit3
         sta score_digit4
+        sta score_digit5
+        sta score_digit6
         jsr display_score_label
         jsr display_score
 
@@ -235,6 +243,7 @@ move_ball_right
 dont_toggle_ball_msb_right
         rts
 
+
 move_ball_left
         lda sprite0_x
         bne dont_toggle_ball_msb_left ;checks zero flag
@@ -288,6 +297,13 @@ set_ball_direction_up
         rts
 
 reset_ball
+        
+        ;test scoring
+        lda #1
+        sta add_points
+        jsr add_score
+        jsr display_score
+
         ;reset ball x,y
         lda ball_start_x
         sta sprite0_x
@@ -416,7 +432,73 @@ display_score
         sta score_digit3_scr_addr
         lda score_digit4
         sta score_digit4_scr_addr
+        lda score_digit5
+        sta score_digit5_scr_addr
+        lda score_digit6
+        sta score_digit6_scr_addr
         lda #0
+        rts
+
+add_score
+        sed
+        clc
+        lda score
+        adc add_points
+        sta score
+        lda score+1
+        adc add_points+1
+        sta score+1
+        lda score+2
+        adc add_points+2
+        sta score+2
+        cld
+
+        ldx #2
+
+        lda score,x
+        pha
+        lsr
+        lsr
+        lsr
+        lsr
+        clc
+        adc #48
+        sta score_digit1
+        pla
+        and #%00001111
+        clc
+        adc #48
+        sta score_digit2
+        dex
+        lda score,x
+        pha
+        lsr
+        lsr
+        lsr
+        lsr
+        clc
+        adc #48
+        sta score_digit3
+        pla
+        and #%00001111
+        clc
+        adc #48
+        sta score_digit4
+        dex
+        lda score,x
+        pha
+        lsr
+        lsr
+        lsr
+        lsr
+        clc
+        adc #48
+        sta score_digit5
+        pla
+        and #%00001111
+        clc
+        adc #48
+        sta score_digit6
         rts
 
 draw_bricks
@@ -507,6 +589,10 @@ score_label
         byte 32,19,3,15,18,5,58
 ball_counter_label 
         byte 2,1,12,12,58
+score
+        byte 0,0,0
+add_points
+        byte 0,0,0
 
 row_color_adrress
         ;55296+X+(40*Y)

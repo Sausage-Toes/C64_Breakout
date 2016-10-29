@@ -602,6 +602,7 @@ calc_ball_scr_addr
 ;xchar = (sprite0_x - left) / 8
         lda sprite0_x
         sec
+        adc #4
         sbc left ;24
         lsr     ;/2
         lsr     ;/4
@@ -610,6 +611,7 @@ calc_ball_scr_addr
 ;ychar = (sprite0_y - top) / 8
         lda sprite0_y
         sec
+        adc #4
         sbc top ;50
         lsr
         lsr
