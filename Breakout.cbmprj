@@ -27,7 +27,6 @@
         <FileName>tutorial1.asm</FileName>
         <FileName>t2.asm</FileName>
         <FileName>brkout.bas</FileName>
-        <FileName>scratch.bas</FileName>
         <FileName>playfield.bas</FileName>
         <FileName>sprite_at_char_pos.bas</FileName>
         <FileName>bouncing_ball.asm</FileName>
@@ -36,6 +35,8 @@
         <FileName>ball_paddle_and_bricks.asm</FileName>
         <FileName>ball_paddle_and_bricks.asm</FileName>
         <FileName>ball_char_position.asm</FileName>
+        <FileName>breakout.asm</FileName>
+        <FileName>display_text.asm</FileName>
     </BuildList>
     <DetermineBuildOrder>0</DetermineBuildOrder>
     <PaddingByte>0</PaddingByte>
@@ -70,7 +71,7 @@
             <Regions />
             <Breakpoints />
             <Bookmarks />
-            <Topmost>True</Topmost>
+            <Topmost>False</Topmost>
             <FileOpen>True</FileOpen>
         </SourceFile>
         <SourceFile>
@@ -82,7 +83,18 @@
             <Breakpoints />
             <Bookmarks />
             <Topmost>False</Topmost>
-            <FileOpen>False</FileOpen>
+            <FileOpen>True</FileOpen>
+        </SourceFile>
+        <SourceFile>
+            <Name>breakout.asm</Name>
+            <PrgName />
+            <FileType>2</FileType>
+            <IncludeInBuild>True</IncludeInBuild>
+            <Regions />
+            <Breakpoints />
+            <Bookmarks />
+            <Topmost>False</Topmost>
+            <FileOpen>True</FileOpen>
         </SourceFile>
         <SourceFile>
             <Name>brkout.bas</Name>
@@ -94,6 +106,17 @@
             <Bookmarks />
             <Topmost>False</Topmost>
             <FileOpen>False</FileOpen>
+        </SourceFile>
+        <SourceFile>
+            <Name>display_text.asm</Name>
+            <PrgName />
+            <FileType>2</FileType>
+            <IncludeInBuild>True</IncludeInBuild>
+            <Regions />
+            <Breakpoints />
+            <Bookmarks />
+            <Topmost>True</Topmost>
+            <FileOpen>True</FileOpen>
         </SourceFile>
         <SourceFile>
             <Name>playfield.asm</Name>
@@ -108,17 +131,6 @@
         </SourceFile>
         <SourceFile>
             <Name>playfield.bas</Name>
-            <PrgName />
-            <FileType>1</FileType>
-            <IncludeInBuild>True</IncludeInBuild>
-            <Regions />
-            <Breakpoints />
-            <Bookmarks />
-            <Topmost>False</Topmost>
-            <FileOpen>False</FileOpen>
-        </SourceFile>
-        <SourceFile>
-            <Name>scratch.bas</Name>
             <PrgName />
             <FileType>1</FileType>
             <IncludeInBuild>True</IncludeInBuild>

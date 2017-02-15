@@ -671,4 +671,4 @@ calc_ball_scr_addr
         sta score_digit4_scr_addr
         lda #87
         sta (SCR_ADDR_LO),y
-        rts
+        rts 

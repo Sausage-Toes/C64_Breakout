@@ -1,3 +1,7 @@
+; 10 SYS (49152)
+*=$801
+        byte $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
+
 ;C64 screen and sprite memory addresses
 enable_sprite       = $D015
 sprite0_mem_pointer = $07F8
@@ -62,9 +66,8 @@ score_digit4_scr_addr = 2021
 score_digit5_scr_addr = 2022
 score_digit6_scr_addr = 2023
 
-
 ;constants 
-left                = #24  ;left border
+left = #18  ;left border
 top                 = #50  ;top
 bottom              = #243 ;bottom
 right               = #81  ;right NOTE: 81 with bit set true is 256+81= 337
@@ -77,9 +80,7 @@ paddle_color        = #6 ;blue paddle
 backgrnd_color      = #0 ;default darkblue is 6 , black=0
 boarder_color       = #15 ;default light blue is 14, light gray=15 
 
-; 10 SYS (49152)
-*=$801
-        byte $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
+
 
 ;sprite data
 * = 16256;16192
@@ -667,3 +668,4 @@ clr
        dey
        bne clr
        rts
+
