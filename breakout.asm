@@ -28,8 +28,8 @@ VIC_BACKGROUND_COLLISION =  $D01F
 
 VIC_BORDER_COLOR      = $D020      ; (53280) Border color
 VIC_BACKGROUND_COLOR  = $D021      ; (53281) Background color
-VIC_SPRITE_ENABLE     = $D015      ; (53269) set bits 0-8 to enable repective sprite
-VIC_SPRITE0_COLOR     = $D027      ; (53287) Sprite #0 Color
+VIC_SPRITE_ENABLE     = $D015      ; (53269) set bits 0-7 to enable repective sprite
+VIC_SPRITE0_COLOR     = $D027      ; (53287) Sprite 0 Color
 VIC_SPRITE1_COLOR     = $D028
 
 JOY_2                 = $DC00
@@ -456,20 +456,16 @@ calc_brick_points
         bcs point_red
         rts
 point_yellow
-        lda #10
-        ;lda #4
+        lda #1
         jmp save_brick_points      
 point_green
         lda #3
-        ;lda #12
         jmp save_brick_points       
 point_orange
         lda #5
-        ;lda #20
         jmp save_brick_points     
 point_red
         lda #7
-        ;lda #28
         jmp save_brick_points      
 save_brick_points
         sta brick_points
