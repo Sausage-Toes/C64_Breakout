@@ -130,8 +130,10 @@ main
         lda BUTTON_RELEASED
         bne @display_title 
         
-        jsr move_paddle
-        jsr move_paddle
+        ;jsr move_paddle
+        ;jsr move_paddle
+        jsr auto_paddle
+  
         jsr move_ball
         jsr check_sprite_collision
         jsr check_sprite_background_collision
@@ -154,6 +156,27 @@ move_paddle
         bcc move_paddle_right
         ;lsr ;button
         ;bcc fire_button
+        rts
+
+auto_paddle
+        lda VIC_SPRITE_X_EXTEND 
+        cmp #1 ;if paddle (sprite 0)msb is set but ball is not set
+        beq @left
+        cmp #2 ;if ball (sprite 1)msb is set but paddle is not set
+        beq @right
+        
+        lda VIC_SPRITE1_X_POS ;ball x
+        ;ldx VIC_SPRITE0_X_POS ;paddle x
+        cmp VIC_SPRITE0_X_POS
+        bcc move_paddle_left ;a less than x
+        cmp VIC_SPRITE0_X_POS
+        bcs move_paddle_right ;a greater or equal x
+        rts
+@left
+        jsr move_paddle_left
+        rts
+@right 
+        jsr move_paddle_right
         rts
 
 move_paddle_left
@@ -294,7 +317,7 @@ hit_floor
         jsr display_ball_count
         lda ball_count
         beq game_over
-        jsr rest_ball
+        jsr reset_ball
         rts
 
 ;===============================
@@ -433,16 +456,20 @@ calc_brick_points
         bcs point_red
         rts
 point_yellow
-        lda #1
+        lda #10
+        ;lda #4
         jmp save_brick_points      
 point_green
         lda #3
+        ;lda #12
         jmp save_brick_points       
 point_orange
         lda #5
+        ;lda #20
         jmp save_brick_points     
 point_red
         lda #7
+        ;lda #28
         jmp save_brick_points      
 save_brick_points
         sta brick_points
@@ -458,16 +485,16 @@ reset_playfield
         lda #$28
         sta brick_count
         jsr display_score
-        jsr rest_ball
+        jsr reset_ball
         lda #1
         sta dir_y
         jsr move_ball_vert
         rts
 
 ;=========================
-; REST BALL 
+; RESET BALL 
 ;=========================
-rest_ball
+reset_ball
         lda #180  ;set x coordinate
         sta VIC_SPRITE1_X_POS ;sprite 1 x
         lda #144  ;set y coordinate
@@ -581,7 +608,7 @@ start_game
         jsr clear_sound
         jsr draw_playfield
         jsr setup_sprites
-        jsr rest_ball
+        jsr reset_ball
         
         lda #0
         sta score
@@ -648,21 +675,35 @@ draw_playfield
 
         rts
 
+;add_score
+;        sed
+;        clc
+;        lda brick_points
+;        adc score
+;        sta score
+;        bcs @carry_bit
+;        cld
+;        rts
+;@carry_bit
+;        sed
+;        clc 
+;        lda #1;??????
+;        sta score+1
+;        cld
+;        rts
+
+
 add_score
         sed
         clc
-        lda brick_points
-        adc score
+        lda score
+        adc brick_points
         sta score
-        bcs @carry_bit
-        cld
-        rts
-@carry_bit
-        sed
-        clc 
-        lda #1;??????
-        adc score+1
-        sta score+1
+        bcc @return
+        lda score+1
+        adc #0
+        sta  score+1       
+@return
         cld
         rts
 
@@ -670,23 +711,24 @@ add_score
 ; DISPLAY SCORE
 ;=======================================
 display_score
-        ldx #1
-        lda score,x
-        pha
-        lsr
+        ;hi byte
+        lda score+1
+        pha ;store orginal value
+        lsr ;shift out the first digit
         lsr
         lsr
         lsr
         clc
-        adc #48
-        sta 2020
-        pla
-        and #%00001111
+        adc #48 ;add petscii code for zero
+        sta 2020 ;write digit to screen
+        pla ;get orginal value
+        and #%00001111 ;mask out last digit
         clc
-        adc #48
-        sta 2021
-        dex
-        lda score,x
+        adc #48 ;add petscii code for zero
+        sta 2021 ;write digit to screen
+        
+        ;lo byte 
+        lda score
         pha
         lsr
         lsr
