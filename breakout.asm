@@ -133,6 +133,7 @@ main
         ;jsr move_paddle
         ;jsr move_paddle
         jsr auto_paddle
+        jsr auto_paddle
   
         jsr move_ball
         jsr check_sprite_collision
