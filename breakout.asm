@@ -959,7 +959,7 @@ TITLE4
         byte 160,160,160,32,32,160,160,32,160,32,160,160,160,160,32,160,160,32,160,32,160,160,32,160,32,160,160,160,160,32,160,160,160,160,32,32,160,160,0
 
 ;-------------------------------------------------------------------------------------------
-; CLEAR SCREEN
+; CLEAR SCREEN  by Sig
 ;-------------------------------------------------------------------------------------------
 ; Clears the screen using a chosen character.
 ; A = Character to clear the screen with
@@ -990,7 +990,7 @@ ColorLoop
         rts
 
 ;-------------------------------------------------------------------------------------------
-; VBL WAIT
+; VBL WAIT  by Sig
 ;-------------------------------------------------------------------------------------------
 ; Wait for the raster to reach line $f8 - if it's aleady there, wait for
 ; the next screen blank. This prevents mistimings if the code runs too fast
@@ -1006,7 +1006,7 @@ WaitFrame
         rts
 
 ;-------------------------------------------------------------------------------------------
-; DISPLAY TEXT
+; DISPLAY TEXT by Sig
 ;-------------------------------------------------------------------------------------------
 ; Displays a line of text.      '@' ($00) is the end of text character
 ;                               '/' ($2f) is the line break character
@@ -1070,7 +1070,7 @@ DisplayText
         rts
 
 ;---------------------------------------------------------------------------------------------------
-; DISPLAY BYTE DATA
+; DISPLAY BYTE DATA by Sig
 ;---------------------------------------------------------------------------------------------------
 ; Displays the data stored in a given byte on the screen as readable text in hex format (0-F)
 ; X = screen line - Yes, this is a little arse-backwards (X and Y) but I don't think
@@ -1176,7 +1176,7 @@ clear_sound
        rts
 
 ;---------------------------------------------------------------------------------------------------
-; Screen Line Offset Tables
+; Screen Line Offset Tables by Sig
 ; Query a line with lda (POINTER TO TABLE),x (where x holds the line number)
 ; and it will return the screen address for that line
 
