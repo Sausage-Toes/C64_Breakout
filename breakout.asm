@@ -358,9 +358,11 @@ check_sprite_collision
         bne @is_collision
         rts
 @is_collision
-        lda VIC_SPRITE_COLLISION
-        eor #%00000001
-        sta VIC_SPRITE_COLLISION
+        ;TODO: Not sure this is working as intended
+        ;reading the vic collision register should also clear
+;        lda VIC_SPRITE_COLLISION
+;        eor #%00000001
+;        sta VIC_SPRITE_COLLISION
         lda #0
         sta dir_y
         jsr sound_bounce
@@ -413,9 +415,11 @@ check_sprite_background_collision
         jsr erase_brick
         ;
         ;clear the sprite collision bit
-        lda VIC_BACKGROUND_COLLISION
-        eor #%00000010 
-        sta VIC_BACKGROUND_COLLISION
+        ;TODO: Not sure this is working as intended
+        ;reading the vic collision register should also clear
+;        lda VIC_BACKGROUND_COLLISION
+;        eor #%00000010 
+;        sta VIC_BACKGROUND_COLLISION
         ;flip verticle direction
         lda dir_y
         eor #%00000001 
